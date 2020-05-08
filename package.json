@@ -13,7 +13,10 @@
     "grunt-contrib-compress": "~0.5.3",
     "grunt-contrib-qunit": "~0.5.1"
   },
-  "scripts" : {
-      "test": "grunt"
+  "scripts": {
+    "test": "grunt"
+  },
+  "dependencies": {
+    "nano-server": "^0.5.4"
   }
 }
