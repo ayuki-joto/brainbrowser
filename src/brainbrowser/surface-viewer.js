@@ -210,7 +210,6 @@
         start: function (element, callback) {
 
             console.log("BrainBrowser Surface Viewer v" + BrainBrowser.version);
-
             /**
              * @doc object
              * @name viewer
@@ -555,10 +554,35 @@
                 callback(viewer);
             });
 
+            // ----------------------
+            var geometry = new BrainBrowser.SurfaceViewer.THREE.SphereGeometry(2,.5,.5);
+
+			var material = new BrainBrowser.SurfaceViewer.THREE.MeshBasicMaterial( { color: 0xee82ee } );
+            var sphere0 = new BrainBrowser.SurfaceViewer.THREE.Mesh( geometry, material );
+
+            var material = new BrainBrowser.SurfaceViewer.THREE.MeshBasicMaterial( { color: 0x1e90ff } );
+            var sphere1 = new BrainBrowser.SurfaceViewer.THREE.Mesh( geometry, material );
+
+            var material = new BrainBrowser.SurfaceViewer.THREE.MeshBasicMaterial( { color: 0x3cb371 } );
+            var sphere2 = new BrainBrowser.SurfaceViewer.THREE.Mesh( geometry, material );
+
+            var material = new BrainBrowser.SurfaceViewer.THREE.MeshBasicMaterial( { color: 0xffd700 } );
+            var sphere3 = new BrainBrowser.SurfaceViewer.THREE.Mesh( geometry, material );
+
+            var material = new BrainBrowser.SurfaceViewer.THREE.MeshBasicMaterial( { color: 0xffa500 } );
+            var sphere4 = new BrainBrowser.SurfaceViewer.THREE.Mesh( geometry, material );
+
+            viewer.model.parent.add(sphere0);
+            viewer.model.parent.add(sphere1);
+            viewer.model.parent.add(sphere2);
+            viewer.model.parent.add(sphere3);
+            viewer.model.parent.add(sphere4);
+
+            // ----------------------
             return viewer;
         }
     };
-
+    
     // Standard modules.
     SurfaceViewer.modules = {};
 
@@ -667,33 +691,44 @@
         }
 
     }
-
+    var finger0pos, finger1pos, finger2pos, finger3pos, finger4pos;
+    // var potisionaaaaaaaaaaaaaaaaaaa = 0.5;
+    var offset_x = 0;
+    var offset_y = -100;
+    var offset_z = 200;
     Leap.loop({enableGestures: true}, function (frame) {
-        if (frame.length > 0) {
-            console.log(frame)
-        }
-        let gestureString = frame.gestures;
-        if (gestureString.length > 0) {
-            let gesture = gestureString[0];
-            if (gesture.type == "swipe") {
-                if (gesture.direction[0] < 0) {
-                    viewer.mouse.x += 5;
-                    drag(viewer.mouse);
-                    viewer.updated = true;
-                }
-                if (gesture.direction[0] > 0) {
-                    viewer.mouse.x += 5;
-                    drag(viewer.mouse);
-                    viewer.updated = true;
-                }
-            }
+        if(frame.hands.length > 0) {
+            let _fingers = frame.hands[0].fingers;
+            // viewer.model.parent.remove(viewer.model.parent.children[1])
+            // console.log(sphere0);
+            viewer.model.parent.children[1].position.x = _fingers[0].tipPosition[0]+offset_x;
+            viewer.model.parent.children[1].position.y = _fingers[0].tipPosition[1]+offset_y;
+            viewer.model.parent.children[1].position.z = _fingers[0].tipPosition[2]*2+offset_z;
+            console.log(_fingers[0].tipPosition);
+            viewer.model.parent.children[2].position.x = _fingers[1].tipPosition[0]+offset_x;
+            viewer.model.parent.children[2].position.y = _fingers[1].tipPosition[1]+offset_y;
+            viewer.model.parent.children[2].position.z = _fingers[1].tipPosition[2]*2+offset_z;
+
+            viewer.model.parent.children[3].position.x = _fingers[2].tipPosition[0]+offset_x;
+            viewer.model.parent.children[3].position.y = _fingers[2].tipPosition[1]+offset_y;
+            viewer.model.parent.children[3].position.z = _fingers[2].tipPosition[2]*2+offset_z;
+
+            viewer.model.parent.children[4].position.x = _fingers[3].tipPosition[0]+offset_x;
+            viewer.model.parent.children[4].position.y = _fingers[3].tipPosition[1]+offset_y;
+            viewer.model.parent.children[4].position.z = _fingers[3].tipPosition[2]*2+offset_z;
+
+            viewer.model.parent.children[5].position.x = _fingers[4].tipPosition[0]+offset_x;
+            viewer.model.parent.children[5].position.y = _fingers[4].tipPosition[1]+offset_y;
+            viewer.model.parent.children[5].position.z = _fingers[4].tipPosition[2]*2+offset_z;
+
+            drag(viewer.mouse);
         }
     });
 })();
 
 var last_x = null;
 var last_y = null;
-function drag(pointer) {
+function drag(pointer , uuid = null) {
     let inverse = new BrainBrowser.SurfaceViewer.THREE.Matrix4();
     let x = pointer.x;
     let y = pointer.y;
@@ -722,11 +757,16 @@ function drag(pointer) {
         }
     }
 
+    // console.log(viewer.model)
     last_x = x;
     last_y = y;
 
-    console.log(last_x)
-    console.log(last_y)
+    // console.log(last_x)
+    // console.log(last_y)
     viewer.updated = true;
+
+
+
 }
+
 
